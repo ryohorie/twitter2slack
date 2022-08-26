@@ -7,9 +7,6 @@ const db = admin.firestore();
 const axios = require("axios");
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms));
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
 function collectionId(twitterId, channelId) {
   return `${channelId}-${twitterId}`;
 }
@@ -147,13 +144,9 @@ exports.twitter2slack = functions
             // フィルター設定したあったら
             if (twitter2slack.filters) {
               const filters = twitter2slack.filters.split(",");
-              let ok = false;
-              for (const filter of filters) {
-                if (user.status.text.includes(filter)) {
-                  ok = true;
-                  break;
-                }
-              }
+              const ok = filters.some((filter) =>
+                user.status.text.includes(filter)
+              );
               if (!ok) {
                 continue;
               }
