@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "kobe-engineer-community"
+    "default": "kobe-engineer-community",
+    "app-developer-community": "app-developer-community"
   }
 }
