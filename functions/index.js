@@ -78,7 +78,6 @@ exports.addTwitter2Slack = functions
         return;
     }
 
-    console.log(request.body.twitter);
     response.send("OK");
   });
 
@@ -112,8 +111,6 @@ exports.twitter2slack = functions
         tweets.push(doc.id);
       });
 
-      console.log(tweets);
-
       // 登録されているtwitterId -> channelIdを取得
       const querySnapshotTwitter2Slack = await db
         .collection("twitter2slack")
@@ -130,7 +127,6 @@ exports.twitter2slack = functions
         screen_name: usernames.join(","),
       });
       for (let user of users) {
-        console.log(user);
         if (
           user.status &&
           user.status.text &&
@@ -141,6 +137,7 @@ exports.twitter2slack = functions
             (t2s) => t2s.twitterId === user.screen_name
           );
           for (let twitter2slack of twitter2slacks) {
+            console.log(twitter2slack);
             // フィルター設定したあったら
             if (twitter2slack.filters) {
               const filters = twitter2slack.filters.split(",");
@@ -161,6 +158,7 @@ exports.twitter2slack = functions
               };
               // slackに投稿
               await slackClient.chat.postMessage(data);
+              console.log(data);
               // firestoreに登録
               data.createdAt = admin.firestore.Timestamp.now();
               await db.collection("tweets").doc(user.status.id_str).set(data);
